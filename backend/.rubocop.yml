@@ -1,0 +1,15 @@
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+
+Style/Documentation:
+  Exclude:
+    - config/**
+    - db/migrate/**
+    - app/controllers/*_controller.rb
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*
