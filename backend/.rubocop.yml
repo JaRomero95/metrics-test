@@ -9,6 +9,7 @@ Style/Documentation:
     - config/**
     - db/migrate/**
     - app/controllers/*_controller.rb
+    - app/repositories/*_repository.rb
 
 Metrics/BlockLength:
   Exclude:

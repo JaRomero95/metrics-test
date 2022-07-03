@@ -37,7 +37,7 @@ RSpec.describe Metric, type: :model do
     end
   end
 
-  describe 'Filters' do
+  describe 'Scopes' do
     let(:timestamp) { Time.zone.now }
     let(:present_instance) { create :metric, timestamp: }
     let(:past_instance) { create :metric, timestamp: (timestamp - 1.minute) }
