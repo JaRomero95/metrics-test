@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class MetricsRepository < ApplicationRepository
+  MODEL = Metric
+
   class << self
     def filter_by_datetime_range(datetime_from:, datetime_until:)
       Metric.datetime_from(datetime_from).datetime_until(datetime_until)

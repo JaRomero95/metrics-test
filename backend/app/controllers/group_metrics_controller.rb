@@ -9,7 +9,7 @@ class GroupMetricsController < ApplicationController
     service = GroupMetricsService.new(group_by:, datetime_from:, datetime_until:)
 
     if service.run
-      render_index service.result
+      render_data service.result
     else
       render_errors service.errors
     end
