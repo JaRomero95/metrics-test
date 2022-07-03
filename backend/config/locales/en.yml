@@ -30,4 +30,13 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activemodel:
+    errors:
+      models:
+        group_metrics_service:
+          attributes:
+            datetime_from:
+              invalid_date: 'invalid date format'
+            datetime_until:
+              invalid_date: 'invalid date format'
+

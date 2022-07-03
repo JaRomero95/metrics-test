@@ -3,8 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe GroupMetricsService do
-  delegate :run, to: :described_class
-
   let!(:repository) { double('MetricsRepository') }
 
   let(:callable_methods) do
@@ -21,8 +19,14 @@ RSpec.describe GroupMetricsService do
   end
 
   context 'when arguments are valid' do
+    it 'returns false' do
+      instance = described_class.new(group_by: 'days', datetime_from:, datetime_until:)
+
+      expect(instance.run).to be_truthy
+    end
+
     it 'calls repository correctly when unit is days' do
-      run(group_unit: 'days', datetime_from:, datetime_until:)
+      described_class.new(group_by: 'days', datetime_from:, datetime_until:).run
 
       expect(repository).to have_received(:value_average_by_days).with(
         datetime_from:,
@@ -31,7 +35,7 @@ RSpec.describe GroupMetricsService do
     end
 
     it 'calls repository correctly when unit is hours' do
-      run(group_unit: 'hours', datetime_from:, datetime_until:)
+      described_class.new(group_by: 'hours', datetime_from:, datetime_until:).run
 
       expect(repository).to have_received(:value_average_by_hours).with(
         datetime_from:,
@@ -40,7 +44,7 @@ RSpec.describe GroupMetricsService do
     end
 
     it 'calls repository correctly when unit is minutes' do
-      run(group_unit: 'minutes', datetime_from:, datetime_until:)
+      described_class.new(group_by: 'minutes', datetime_from:, datetime_until:).run
 
       expect(repository).to have_received(:value_average_by_minutes).with(
         datetime_from:,
@@ -50,14 +54,20 @@ RSpec.describe GroupMetricsService do
   end
 
   context 'when arguments are invalid' do
-    let!(:result) { run(group_unit: 'wrong', datetime_from:, datetime_until:) }
+    let(:instance) { described_class.new(group_by: 'wrong', datetime_from:, datetime_until:) }
+
+    let!(:result) { instance.run }
+
+    it 'returns false' do
+      expect(result).to be_falsey
+    end
 
     it 'does not call any repository methods' do
       callable_methods.each { |method_name| expect(repository).not_to have_received(method_name) }
     end
 
     it 'has accesible errors' do
-      expect(result.errors.details).not_to be_empty
+      expect(instance.errors.details).not_to be_empty
     end
   end
 

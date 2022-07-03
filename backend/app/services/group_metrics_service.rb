@@ -4,32 +4,49 @@
 class GroupMetricsService
   include ActiveModel::Validations
 
-  attr_reader :group_unit, :datetime_from, :datetime_until
+  attr_reader :group_by, :datetime_from, :datetime_until, :result
 
-  validates :group_unit, presence: true, inclusion: { in: %w[days hours minutes] }
+  validates :group_by, presence: true, inclusion: { in: %w[days hours minutes] }
+  validate :validate_datetime_from
+  validate :validate_datetime_until
 
-  class << self
-    def run(group_unit:, datetime_from:, datetime_until:)
-      new(group_unit:, datetime_from:, datetime_until:).tap(&:run)
-    end
-  end
-
-  def initialize(group_unit:, datetime_from:, datetime_until:)
-    @group_unit = group_unit
+  def initialize(group_by:, datetime_from:, datetime_until:)
+    @group_by = group_by
     @datetime_from = datetime_from
     @datetime_until = datetime_until
   end
 
   def run
-    return unless valid?
+    return false unless valid?
 
-    MetricsRepository.public_send repository_target_method, datetime_from: @datetime_from,
-                                                            datetime_until: @datetime_until
+    @result = MetricsRepository.public_send repository_target_method,
+                                            datetime_from: @datetime_from,
+                                            datetime_until: @datetime_until
+
+    true
   end
 
   private
 
   def repository_target_method
-    "value_average_by_#{@group_unit}"
+    "value_average_by_#{@group_by}"
+  end
+
+  def validate_datetime_from
+    validate_date('datetime_from')
+  end
+
+  def validate_datetime_until
+    validate_date('datetime_until')
+  end
+
+  def validate_date(date_field)
+    value = public_send(date_field)
+
+    return if value.is_a?(ActiveSupport::TimeWithZone)
+
+    instance_variable_set("@#{date_field}", DateTime.parse(value))
+  rescue Date::Error
+    errors.add(date_field, :invalid_date)
   end
 end
