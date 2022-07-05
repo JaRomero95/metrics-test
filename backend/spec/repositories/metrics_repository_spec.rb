@@ -48,8 +48,8 @@ RSpec.describe MetricsRepository do
                                                datetime_until: Time.zone.now
     end
 
-    it "group metrics by #{time_unit}" do
-      expect(result.keys.count).to be(2)
+    it "group metrics by existing #{time_unit}" do
+      expect(result.keys.count).to be(3)
     end
 
     it "calculates average per #{time_unit}" do
@@ -61,20 +61,26 @@ RSpec.describe MetricsRepository do
 
       expect(average).to eq(expected_average)
     end
+
+    it "fill #{time_unit} without data with 0" do
+      key = result.keys.second
+
+      expect(result[key]).to be(0)
+    end
   end
 
   it_behaves_like 'calculates avg by time unit', time_unit: :days,
                                                  date_format: '%Y%m%d',
-                                                 date_one: 3.days.ago,
+                                                 date_one: 4.days.ago,
                                                  date_two: 2.days.ago
 
   it_behaves_like 'calculates avg by time unit', time_unit: :hours,
                                                  date_format: '%Y%m%d%H',
-                                                 date_one: 3.hours.ago,
+                                                 date_one: 4.hours.ago,
                                                  date_two: 2.hours.ago
 
   it_behaves_like 'calculates avg by time unit', time_unit: :minutes,
                                                  date_format: '%Y%m%d%H%M',
-                                                 date_one: 3.minutes.ago,
+                                                 date_one: 4.minutes.ago,
                                                  date_two: 2.minutes.ago
 end
