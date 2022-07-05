@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MetricsController < ApplicationController
   PRESENTER = ::MetricsPresenter
 
@@ -5,8 +7,8 @@ class MetricsController < ApplicationController
     metric = MetricsRepository.create(create_params)
 
     render_data metric
-  rescue InvalidModelError => error
-    render_errors error.errors
+  rescue InvalidModelError => e
+    render_errors e.errors
   end
 
   private

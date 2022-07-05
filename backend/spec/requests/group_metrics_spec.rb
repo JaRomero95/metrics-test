@@ -31,7 +31,7 @@ RSpec.describe 'GroupMetrics', type: :request do
         expected_params = {
           group_by: params[:group_by],
           datetime_from: params[:filter][:datetime_from],
-          datetime_until: params[:filter][:datetime_until],
+          datetime_until: params[:filter][:datetime_until]
         }
 
         expect(GroupMetricsService).to have_received(:new).with(expected_params)
@@ -50,11 +50,13 @@ RSpec.describe 'GroupMetrics', type: :request do
       before { get url }
 
       it 'calls GroupMetricsService correctly' do
-        expect(GroupMetricsService).to have_received(:new).with(hash_including(
-          datetime_from: instance_of(ActiveSupport::TimeWithZone),
-          datetime_until: instance_of(ActiveSupport::TimeWithZone),
-          group_by: 'minutes'
-        ))
+        expect(GroupMetricsService).to have_received(:new).with(
+          hash_including(
+            datetime_from: instance_of(ActiveSupport::TimeWithZone),
+            datetime_until: instance_of(ActiveSupport::TimeWithZone),
+            group_by: 'minutes'
+          )
+        )
       end
     end
 
