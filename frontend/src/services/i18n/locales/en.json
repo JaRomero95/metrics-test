@@ -1,0 +1,16 @@
+{
+  "title": "Grouped metrics App",
+  "groupBy": "Group by",
+  "datetimeFrom": "Date & Time from",
+  "datetimeUntil": "Date & Time until",
+  "filtersGroupMetrics": "Filter metrics",
+  "metricForm": "Create metric",
+  "days": "Days",
+  "hours": "Hours",
+  "minutes": "Minutes",
+  "search": "Search",
+  "name": "Name",
+  "value": "Value",
+  "save": "Save",
+  "timestamp": "Timestamp"
+}
